@@ -45,6 +45,13 @@ export default {
     file: 'public/build/bundle.js',
   },
   plugins: [
+    replace({
+      process: JSON.stringify({
+        env: {
+          API_BASE: process.env.API_BASE,
+        },
+      }),
+    }),
     svelte({
       // enable run-time checks when not in production
       dev: !production,
@@ -85,13 +92,6 @@ export default {
           dest: 'public/vendor/materialize-css',
         },
       ],
-    }),
-    replace({
-      process: {
-        env: {
-          API_BASE: process.env.API_BASE,
-        },
-      },
     }),
   ],
   watch: {
