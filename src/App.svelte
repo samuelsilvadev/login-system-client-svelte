@@ -1,10 +1,5 @@
 <script>
-  import Users from './components/users/Users.svelte';
+  import Router from './components/router/Router.svelte';
 </script>
 
-<style>
-</style>
-
-<main class="container">
-  <Users />
-</main>
+<Router />
