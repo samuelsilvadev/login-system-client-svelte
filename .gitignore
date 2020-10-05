@@ -3,3 +3,4 @@
 /public/vendor/materialize-css/
 
 .DS_Store
+.env
