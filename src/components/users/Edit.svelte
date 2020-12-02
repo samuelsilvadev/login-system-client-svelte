@@ -1,10 +1,25 @@
 <script>
-  import API_ROUTES from '../../utils/apiRoutes';
+  import { onMount } from 'svelte';
+  import { navigate } from 'svelte-routing';
 
+  import API_ROUTES from '../../utils/apiRoutes';
+  import * as routes from '../router/routes';
+
+  export let id = null;
   let firstName = '';
   let lastName = '';
   let email = '';
   let password = '';
+
+  onMount(() => {
+    if (typeof window !== 'undefined') {
+      const { user } = window.history.state || {};
+
+      firstName = user.firstName;
+      lastName = user.lastName;
+      email = user.email;
+    }
+  });
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -13,18 +28,18 @@
     // TODO: add error message
 
     fetch(`${process.env.API_BASE}${API_ROUTES.user}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      method: 'PUT',
       body: new URLSearchParams({
+        id,
         firstName,
         lastName,
         email,
         password,
       }),
     })
-      .then(console.log)
+      .then(() => {
+        navigate(routes.USERS);
+      })
       .catch(console.error);
   }
 </script>
