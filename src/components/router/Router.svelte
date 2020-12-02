@@ -3,6 +3,9 @@
 
   import Users from '../users/Users.svelte';
   import UsersRegister from '../users/Register.svelte';
+  import UsersEdit from '../users/Edit.svelte';
+
+  import * as routes from './routes';
 
   export let url = '';
 </script>
@@ -12,16 +15,17 @@
     <div class="nav-wrapper">
       <ul class="right">
         <li>
-          <Link to="/users">Users</Link>
+          <Link to={routes.USERS}>Users</Link>
         </li>
         <li>
-          <Link to="/users/add">Add User</Link>
+          <Link to={routes.ADD_USER}>Add User</Link>
         </li>
       </ul>
     </div>
   </nav>
   <main class="container">
-    <Route path="users" component={Users} />
-    <Route path="users/add" component={UsersRegister} />
+    <Route path={routes.USERS} component={Users} />
+    <Route path={routes.ADD_USER} component={UsersRegister} />
+    <Route path={`${routes.EDIT_USER}/:id`} component={UsersEdit} />
   </main>
 </Router>
