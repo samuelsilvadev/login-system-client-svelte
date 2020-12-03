@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
 
+  import Alert from '../alert/Alert.svelte';
+
   import API_ROUTES from '../../utils/apiRoutes';
   import * as routes from '../router/routes';
 
@@ -10,6 +12,7 @@
   let lastName = '';
   let email = '';
   let password = '';
+  let errorMessage;
 
   onMount(() => {
     if (typeof window !== 'undefined') {
@@ -24,8 +27,9 @@
   function handleSubmit(event) {
     event.preventDefault();
 
-    // TODO:add loading indicator
-    // TODO: add error message
+    errorMessage = undefined;
+
+    // TODO: add loading indicator
 
     fetch(`${process.env.API_BASE}${API_ROUTES.user}`, {
       method: 'PUT',
@@ -40,7 +44,9 @@
       .then(() => {
         navigate(routes.USERS);
       })
-      .catch(console.error);
+      .catch(() => {
+        errorMessage = 'Something went wrong';
+      });
   }
 </script>
 
@@ -56,6 +62,7 @@
 </style>
 
 <div class="row">
+  <Alert message={errorMessage} />
   <form on:submit={handleSubmit} class="col s12">
     <div class="row">
       <div class="input-field col s12">
@@ -63,6 +70,7 @@
           placeholder="First Name"
           id="first-name"
           type="text"
+          required
           bind:value={firstName} />
         <label for="first-name" class="hiddenLabel">First Name</label>
       </div>
@@ -73,13 +81,19 @@
           placeholder="Last Name"
           id="last-name"
           type="text"
+          required
           bind:value={lastName} />
         <label for="last-name" class="hiddenLabel">Last Name</label>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s12">
-        <input placeholder="Email" id="email" type="email" bind:value={email} />
+        <input
+          placeholder="Email"
+          id="email"
+          type="email"
+          required
+          bind:value={email} />
         <label for="email" class="hiddenLabel">Email</label>
       </div>
     </div>
@@ -89,6 +103,7 @@
           placeholder="Password"
           id="password"
           type="password"
+          required
           bind:value={password}
           autocomplete="current-password" />
         <label for="password" class="hiddenLabel">Password</label>

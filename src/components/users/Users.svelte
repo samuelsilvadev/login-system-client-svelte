@@ -2,15 +2,19 @@
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
 
+  import Alert from '../alert/Alert.svelte';
+
   import API_ROUTES from '../../utils/apiRoutes';
   import * as routes from '../router/routes';
 
   export let users = null;
+  let errorMessage;
 
-  // TODO:add loading indicator
-  // TODO: add error message
+  // TODO: add loading indicator
 
   function getUsers() {
+    errorMessage = undefined;
+
     fetch(`${process.env.API_BASE}${API_ROUTES.user}`)
       .then((response) => response.json())
       .then((data) => {
@@ -18,6 +22,7 @@
       })
       .catch(() => {
         users = null;
+        errorMessage = 'Something went wrong when tried to get users';
       });
   }
 
@@ -33,6 +38,8 @@
 
   function onDeleteClickFactory(user) {
     return function handleOnDeleteClick() {
+      errorMessage = undefined;
+
       fetch(`${process.env.API_BASE}${API_ROUTES.user}`, {
         method: 'DELETE',
         body: new URLSearchParams({
@@ -40,10 +47,14 @@
         }),
       })
         .then(getUsers)
-        .catch(console.error);
+        .catch(() => {
+          errorMessage = 'Something went wrong when tried to delete user';
+        });
     };
   }
 </script>
+
+<Alert message={errorMessage} />
 
 {#if users}
   <table>
