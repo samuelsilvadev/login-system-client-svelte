@@ -1,16 +1,22 @@
 <script>
   import { navigate } from 'svelte-routing';
 
+  import Alert from '../alert/Alert.svelte';
+
   import API_ROUTES from '../../utils/apiRoutes';
   import * as routes from '../router/routes';
 
   let email;
   let password;
+  let errorMessage;
 
   function handleOnSubmit(event) {
     event.preventDefault();
 
+    errorMessage = undefined;
+
     if (!email || !password) {
+      errorMessage = 'You need to fill email and password';
       return;
     }
 
@@ -28,10 +34,12 @@
         if (response.status === 200) {
           navigate(routes.USERS);
         } else {
-          console.error('Unautorizhed...');
+          errorMessage = 'Email or password are incorrects';
         }
       })
-      .catch(console.error);
+      .catch(() => {
+        errorMessage = 'Something went wrong';
+      });
   }
 </script>
 
@@ -47,6 +55,7 @@
 </style>
 
 <div class="row">
+  <Alert message={errorMessage} />
   <form on:submit={handleOnSubmit} class="col s6 push-s3">
     <div class="row">
       <div class="input-field col s12">
