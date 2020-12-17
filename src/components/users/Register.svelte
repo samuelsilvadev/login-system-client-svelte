@@ -4,6 +4,7 @@
   import Alert from '../alert/Alert.svelte';
 
   import API_ROUTES from '../../utils/apiRoutes';
+  import * as routes from '../router/routes';
 
   let firstName = '';
   let lastName = '';
